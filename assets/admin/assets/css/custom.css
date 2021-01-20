@@ -1,0 +1,17 @@
+#tab_mod{
+    background-color: #E6B86A;color:#000000
+}
+.card-primary.card-outline {
+    border-top: 2px solid #E6B86A !Important;
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: #E6B86A !important;
+    color:#000000 !important;
+}
+.main-sidebar {
+    background-color: #000000 !Important;
+}
+
+.main-header a{
+    color: #000000 !Important;
+}
