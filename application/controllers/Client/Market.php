@@ -46,34 +46,59 @@ class Market extends Client_Controller
         $this->load->view('client/inc/view', $general);
     }
     
-    public function add_to_cart($id, $price)
+    public function add_to_cart()
     {
-        $this->load->library('session');
-        if(empty($session_data)){
-            $data_session = [
-                $is => [
-                    'id' => $id,
-                    'price' => $price
-                ]
-            ];
+        $this->load->library('cart');
+        $data = array(
+          'id'      =>  rand()*32,
+          'qty'     => 1,
+          'price'   => $_GET['price'],
+          'name'    => $_GET['name'],
+          // 'options' => array('Size' => 'L', 'Color' => 'Red')
+        );
+        $id = $this->cart->insert($data);
+        if(!empty($id)){
+          $this->session->set_flashdata('msg', '1');
+          $this->session->set_flashdata('alert_data', 'Added To Cart');
+          redirect('client/market');
         }
-   
-       // $this->session->unset_userdata('data_session');
-
-        $session_data = $this->session->set_userdata('data_session',$data_session);
-        echo json_encode($session_data);
     }
-    
-    public function pay($id)
+    public function view_cart(){
+      $general['main_content'] = 'client/market/cart';
+      //$general['permission'] = $this->permission;
+      $this->load->view('client/inc/view', $general);
+    }
+
+    public function update_cart(){
+      foreach($_POST as $row => $key){
+        $data[$row] = array(
+          'rowid' => $key['rowid'],
+          'qty'   => $key['qty']
+        );
+      }
+      $id = $this->cart->update($data);
+      if(!empty($id)){
+        $this->session->set_flashdata('msg', '1');
+        $this->session->set_flashdata('alert_data', 'Cart Updated');
+        redirect('client/market/view_cart');
+      }
+    }
+
+    public function del_item($id){
+      $id = $this->cart->remove($id);
+      if(!empty($id)){
+        $this->session->set_flashdata('msg', '1');
+        $this->session->set_flashdata('alert_data', 'Item Removed');
+        redirect('client/market/view_cart');
+      }
+    }
+    public function pay()
     {
-        if($id != 0 || $id !== 'NULL'){
           if(!empty($_POST)){
-              print_r($_POST['package_price']);
-              exit;
               require_once('application/libraries/stripe-php/init.php');
               \Stripe\Stripe::setApiKey($this->config->item('stripe_secret'));
               $chargeStripe = \Stripe\Charge::create ([
-                      "amount" => 100 * $_POST['package_price'],
+                      "amount" => 100 * $this->cart->format_number($this->cart->total()),
                       "currency" => "usd",
                       "source" => $this->input->post('stripeToken'),
                       "description" => "Test payment from Brand Dynasty"
@@ -92,38 +117,17 @@ class Market extends Client_Controller
                       );
                       $dd = $this->admin_m->update_data('client_intake_payments', 
                           $datas, array('payment_no' => $payment_no));
+                      $this->cart->destroy();
                       $this->session->set_flashdata('msg', '1');
                       $this->session->set_flashdata('alert_data', 'Payment has been made. Kindly Log In to your Dashboard');
-                      redirect('/client/projects/index', 'refresh');
+                      redirect('/client/market', 'refresh');
               }
           } else{
-                $data=array(
-                  'select'=>'type',
-                  'table'=>'client_project_brief',
-                  'where'=>array('project_brief_id'=>$id),
-                  'output_type'=>'row'
-                );
-                $general['search_type']=$this->admin_m->get($data);
-                if($general['search_type']->type=='lb'){
-                  $where='lb';
-                } else if($general['search_type']->type=='wb'){
-                  $where='wb';
-                } else if($general['search_type']->type=='cb'){
-                  $where='cb';
-                } else {
-                  $where='';
-                }
-                $general['packages']=$this->admin_m->get_list('packages', array('package_type'=>$where));
-                $general['id']=$id;
-                $general['main_content'] = 'client/payment/pay';
+                $general['main_content'] = 'client/market/pay';
                 $general['permission'] = $this->permission;
                 $this->load->view('client/inc/view', $general);
-              }
-        } else{
-          $this->session->set_flashdata('msg', '2');
-          $this->session->set_flashdata('alert_data', 'Can not pay unless you submit Brief Form.');
-          redirect('client/projects/index');
-        }
+          }
+  
   }
 }
 ?>

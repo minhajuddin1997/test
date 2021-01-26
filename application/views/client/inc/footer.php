@@ -243,23 +243,28 @@ $(document).ready(function () {
         }
         return false;
     }
-    //Date range picker
-    $('input[name="project_due_date"]').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        minYear: 1901,
-        // maxYear: parseInt(moment().format('YYYY'),10)
-        maxYear: 2050,
-      }, function(start, end, label) {
-        $("#bir").on('change',function(){
-            var years = moment().diff(start, 'years');
-            if(dateCheck("12/01/2020", "12/15/2020",$(this).val()))
-                toastr.success("Available");
-            else
-                toastr.error("Not Available");
-        });
+    var dates = ["12/01/2020", "12/15/2020"];
+
+    // $('input[name="project_due_date"]').daterangepicker({
+    //     singleDatePicker: true,
+    //     showDropdowns: true,
+    //     minYear: 1901,
+    //     beforeShowDay: function(d) {
+    //       var a = new Date(2012, 3, 10); // April 10, 2012
+    //       var b = new Date(2012, 3, 20); // April 20, 2012
+    //       return [true, a <= d && d <= b ? "my-class" : ""];
+    //     }
+    //     // maxYear: parseInt(moment().format('YYYY'),10)
+    //   }, function(start, end, label) {
+    //     $("#bir").on('change',function(){
+    //         var years = moment().diff(start, 'years');
+    //         if(dateCheck("12/01/2020", "12/15/2020",$(this).val()))
+    //             toastr.success("Available");
+    //         else
+    //             toastr.error("Not Available");
+    //     });
             
-    });
+    // });
 
 
         (function() {

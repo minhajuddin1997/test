@@ -57,7 +57,7 @@ img {
 
                             </div>
                             
-                            <a id='<?php echo !empty($row->price_html) ? $row->price_html : '0'; ?>' class='btn btn-info' style="color:#333;" href='<?php echo base_url("client/market/add_to_cart/"); ?><?php echo $row->id . '/' . $row->price; ?>'>Add to Cart</a>
+                            <a id='<?php echo !empty($row->price_html) ? $row->price_html : '0'; ?>' class='btn btn-info' style="color:#333;" href='<?php echo base_url("client/market/add_to_cart?price="); ?><?php echo $row->price; ?>&name=<?php echo $row->name;?>'>Add to Cart</a>
                         </div><img src="<?php echo $row->images[0]->src; ?>" alt="DYNISTY IMAGE HERE" width="200" class="ml-lg-5 order-1 order-lg-2" >
                     </div> <!-- End -->
                 </li> <!-- End -->

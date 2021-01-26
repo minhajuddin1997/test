@@ -197,7 +197,6 @@ input{
             <label for="descriptionInput">Description:</label>
             <input class="form-control form-control-sm" type="text" name="description" id="descriptionInput" autocomplete="off">
             <button class="btn btn-dark" id="add">Add</button>
-            <button class="btn btn-danger mx-2" id="deleteAll">Delete All</button>
         </form>
     </div>
 <section class="content" style="padding:1rem;">
@@ -218,9 +217,7 @@ input{
     </div>
 </section>
 </div>
-
-<script type="text/javascript">
-
+<script>
 //variables
 let cardBeignDragged;
 let dropzones = document.querySelectorAll('.dropzone');
@@ -243,33 +240,50 @@ let theme="light";
 $(document).ready(()=>{
     $("#loadingScreen").addClass("d-none");
     theme = localStorage.getItem('@kanban:theme');
-    if(theme){
-        $("body").addClass(`${theme==="light"?"":"darkmode"}`);
-    }
     initializeBoards();
-    if(JSON.parse(localStorage.getItem('@kanban:data'))){
-        dataCards = JSON.parse(localStorage.getItem('@kanban:data'));
-        console.log(dataCards);
-        initializeComponents(dataCards);
-    }
-    initializeCards();
-    $('#add').click(()=>{
+    var urls = "<?php echo base_url('client/kanban/kanban_data'); ?>";
+    $.ajax({
+      type: "GET",
+      url: urls,
+      dataType: "json",
+      success: function (data) {
+        if(data.length > 0){
+            dataCards.cards = data;
+            dataCards.config.maxid = data.length;
+            initializeComponents(dataCards);
+        }
+        initializeCards();
+      }
+    });
+
+
+    $('#add').click((e)=>{
         const title = $('#titleInput').val()!==''?$('#titleInput').val():null;
         const description = $('#descriptionInput').val()!==''?$('#descriptionInput').val():null;
-
         $('#titleInput').val('');
         $('#descriptionInput').val('');
-        
         if(title && description){
+            //console.log(dataCards);
             let id = dataCards.config.maxid+1;
             const newCard = {
                 id,
                 title,
                 description,
                 position:"green",
-                priority: false
-            }
+                priority: false,
+            }    
+            //console.log(dataCards);
             dataCards.cards.push(newCard);
+            var urls = "<?php echo base_url('client/kanban/kanban_data'); ?>";
+            $.ajax({
+              type: "POST",
+              url: urls,
+              data: {"dd": newCard},
+              dataType: "json",
+              success: function (data) {
+                //console.log(data);
+              }
+            });
             dataCards.config.maxid = id;
             save();
             appendComponents(newCard);
@@ -282,12 +296,12 @@ $(document).ready(()=>{
     });
     $("#theme-btn").click((e)=>{
         e.preventDefault();
-        $("body").toggleClass("darkmode");
+        $("body").toggleClass("light");
         if(theme){
-            localStorage.setItem("@kanban:theme", `${theme==="light"?"darkmode":""}`)
+            localStorage.setItem("@kanban:theme", `${theme==="light"?"light":""}`)
         }
         else{
-            localStorage.setItem("@kanban:theme", "darkmode")
+            localStorage.setItem("@kanban:theme", "light")
         }
     });
 });
@@ -325,6 +339,8 @@ function initializeCards(){
 }
 
 function initializeComponents(dataArray){
+            console.log(dataArray);
+
     //create all the stored cards and put inside of the todo area
     dataArray.cards.forEach(card=>{
         appendComponents(card); 
@@ -344,9 +360,7 @@ function appendComponents(card){
                     star
                 </span>
                 <button class="invisibleBtn">
-                    <span class="fas fa-trash-alt delete" onclick="deleteCard(${card.id.toString()})">
-                        
-                    </span>
+                    
                 </button>
             </form>
         </div>
@@ -365,11 +379,12 @@ function togglePriority(event){
     save();
 }
 
-function deleteCard(id){
+function deleteCard(id,e){
     dataCards.cards.forEach(card=>{
         if(card.id === id){
             let index = dataCards.cards.indexOf(card);
-            console.log(index)
+            console.log(index);
+            
             dataCards.cards.splice(index, 1);
             console.log(dataCards.cards);
             save();
@@ -381,33 +396,29 @@ function deleteCard(id){
 function removeClasses(cardBeignDragged, color){
     cardBeignDragged.classList.remove('red');
     cardBeignDragged.classList.remove('blue');
-    cardBeignDragged.classList.remove('purple');
     cardBeignDragged.classList.remove('green');
-    cardBeignDragged.classList.remove('yellow');
     cardBeignDragged.classList.add(color);
     position(cardBeignDragged, color);
 }
 
 function save(){
-   // console.log(dataCards);
-    localStorage.setItem('@kanban:data', JSON.stringify(dataCards));
-      $.ajax({
-        url: "<?php echo base_url('client/kanban/add'); ?>",
-        type: "POST",
-        data: {dataCards},
-        dataType: 'JSON',
-        success: function(res){
-            console.log(res);
-          if(res == 1){
-              toastr.success('ADDED');
-          }
-        }
-      });
-
+    var url = "<?php echo base_url('client/kanban/update_data'); ?>";
+    console.log("this is update" +dataCards);
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {"update": dataCards},
+      dataType: "json",
+      success: function (data) {
+        //console.log("this is update" + dataCards);
+      }
+    });
+    //localStorage.setItem('@kanban:data', JSON.stringify(dataCards));
 }
 
 function position(cardBeignDragged, color){
-    const index = dataCards.cards.findIndex(card => card.id === parseInt(cardBeignDragged.id));
+    const index = dataCards.cards.findIndex(card => card.id ===cardBeignDragged.id);
+    console.log(cardBeignDragged.id);
     dataCards.cards[index].position = color;
     save();
 }
@@ -435,18 +446,12 @@ function dragenter(){
 function dragover({target}){
     this.classList.add('over');
     cardBeignDragged = document.querySelector('.is-dragging');
-    if(this.id ==="yellow"){
-        removeClasses(cardBeignDragged, "yellow");
-        
-    }
-    else if(this.id ==="green"){
+    console.log(cardBeignDragged);
+    if(this.id ==="green"){
         removeClasses(cardBeignDragged, "green");
     }
     else if(this.id ==="blue"){
         removeClasses(cardBeignDragged, "blue");
-    }
-    else if(this.id ==="purple"){
-        removeClasses(cardBeignDragged, "purple");
     }
     else if(this.id ==="red"){
         removeClasses(cardBeignDragged, "red");

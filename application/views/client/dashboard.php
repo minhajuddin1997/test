@@ -45,7 +45,7 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
+          <!-- <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
@@ -53,10 +53,8 @@
                 <span class="info-box-text">Current Projects</span>
                 <span class="info-box-number">41,410</span>
               </div>
-              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
-          </div>
+          </div> -->
           <!-- /.col -->
 
           <!-- fix for small devices only -->
@@ -143,79 +141,65 @@
                 		<canvas id="canvas"></canvas>
                 		<progress id="animationProgress" max="1" value="0" style="width: 100%; background-color:#E6B86A;"></progress>
 	                </div>
-	<br>
-	<br>
-	<button id="randomizeData">Randomize Data</button>
-	<script>
-		var progress = document.getElementById('animationProgress');
-		var config = {
-			type: 'line',
-			data: {
-				labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July','Aug','Sep','Oct','Nov','Dec'],
-				datasets: [{
-					label: 'Project',
-					fill: false,
-					borderColor: window.chartColors.yellow,
-					backgroundColor: window.chartColors.yellow,
-					data: [
-						2,
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					]
-				}, {
-					label: 'My Second dataset ',
-					fill: false,
-					borderColor: window.chartColors.black,
-					backgroundColor: window.chartColors.black,
-					data: [
-						444,
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					]
-				}]
-			},
-			options: {
-				title: {
-					display: true,
-					text: ''
-				},
-				animation: {
-					duration: 2000,
-					onProgress: function(animation) {
-						progress.value = animation.currentStep / animation.numSteps;
-					},
-					onComplete: function() {
-						window.setTimeout(function() {
-							progress.value = 0;
-						}, 2000);
-					}
-				}
-			}
-		};
+          <br>
+          <br>
+          
+        <script>
+          var progress = document.getElementById('animationProgress');
+          var config = {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July','Aug','Sep','Oct','Nov','Dec'],
+              datasets: [{
+                label: 'Project',
+                fill: false,
+                borderColor: window.chartColors.yellow,
+                backgroundColor: window.chartColors.yellow,
+                data: [
+                  2,
+                  randomScalingFactor(),
+                  randomScalingFactor(),
+                  randomScalingFactor(),
+                  randomScalingFactor(),
+                  randomScalingFactor(),
+                  randomScalingFactor()
+                ]
+              }]
+            },
+            options: {
+              title: {
+                display: true,
+                text: ''
+              },
+              animation: {
+                duration: 2000,
+                onProgress: function(animation) {
+                  progress.value = animation.currentStep / animation.numSteps;
+                },
+                onComplete: function() {
+                  window.setTimeout(function() {
+                    progress.value = 0;
+                  }, 2000);
+                }
+              }
+            }
+          };
 
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-		};
+          window.onload = function() {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            window.myLine = new Chart(ctx, config);
+          };
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data = dataset.data.map(function() {
-					return randomScalingFactor();
-				});
-			});
+          document.getElementById('randomizeData').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+              dataset.data = dataset.data.map(function() {
+                return randomScalingFactor();
+              });
+            });
 
-			window.myLine.update();
-		});
-	</script>
+            window.myLine.update();
+          });
+        </script>
                     </div>
                   </div>
                 </div><!-- /.d-md-flex -->
@@ -236,37 +220,34 @@
               <span class="info-box-icon"><i class="fas fa-tag"></i></span>
               <div class="info-box-content" style="font-size:25px;">
                 <span class="info-box-text">Comments</span>
-                <span class="info-box-number">5,200</span>
+                <?php
+                  $val = get_list('comments',array('sender_id'=>$this->session->userdata('client_id')));
+                ?>
+                <span class="info-box-number"><?= !empty($val) ? count($val) : '0'; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
             <div class="info-box mb-3" style="padding:2rem;background:url('https://image.freepik.com/free-photo/abstract-yellow-brush-stroke-white-background_23-2147835995.jpg');background-position: -400px 10px;">
               <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
+              <?php
+                  //$circle = get_list('circles',array('sender_id'=>$this->session->userdata('client_id')));
+              ?>
               <div class="info-box-content" style="font-size:25px;">
                 <span class="info-box-text">Circles</span>
-                <span class="info-box-number">92,050</span>
+                <span class="info-box-number"><?= '2'; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
-            <div class="info-box mb-3" style="padding:2rem;background:url('https://image.freepik.com/free-photo/abstract-yellow-brush-stroke-white-background_23-2147835995.jpg');background-position: -400px 10px;">
+            <div class="info-box mb-3" style="padding:2rem;background:url('https://image.freepik.com/free-photo/abstract-yellow-brush-stroke-white-background_23-2147835995.jpg');background-position: -400px 10px;
+              
+            ">
               <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
 
               <div class="info-box-content" style="font-size:25px;">
                 <span class="info-box-text">Files</span>
                 <span class="info-box-number">114,381</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3" style="padding:2rem;background:url('https://image.freepik.com/free-photo/abstract-yellow-brush-stroke-white-background_23-2147835995.jpg');background-position: -400px 10px;">
-              <span class="info-box-icon"><i class="far fa-comment"></i></span>
-
-              <div class="info-box-content" style="font-size:25px;">
-                <span class="info-box-text">Direct Messages</span>
-                <span class="info-box-number">163,921</span>
               </div>
               <!-- /.info-box-content -->
             </div>

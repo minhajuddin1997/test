@@ -31,35 +31,39 @@ class Projects extends Client_Controller {
   public function add(){
     if(!empty($_POST)){
         $table='client_projects';
-        foreach($_POST as $key => $val){           
-              if(strpos($key ,'slug') !== false){
-                $result = check_slug($table,$this->input->post($key));          
-                $data[$key] = $result;          
-              }
-              else{
-                $data[$key] = $this->input->post($key);  
-              }       
-        }
+        // foreach($_POST as $key => $val){           
+        //       if(strpos($key ,'slug') !== false){
+        //         $result = check_slug($table,$this->input->post($key));          
+        //         $data[$key] = $result;          
+        //       }
+        //       else{
+        //         $data[$key] = $this->input->post($key);  
+        //       }       
+        // }
         
         if(!empty($_FILES['summary_file']['name']))
         {
             $record['summary_file'] = summary_file_upload($_FILES['summary_file'],"./uploads/"."client_projects");
       
         }
-        $data['client_project_members'] = json_encode($_POST['client_project_members']);
+        //$data['client_project_members'] = json_encode($_POST['client_project_members']);
         $data['summary_file'] = $record['summary_file'];
-        if(!empty($data['rush']) || !empty($data['addons'] && !empty($data['addon_price']))):
-            unset($data['rush']);
-            unset($data['addons']);
-            unset($data['addon_price']);
+        if(!empty($_POST['rush']) || !empty($_POST['addons'])):
+            unset($_POST['rush']);
+           // unset($_POST['addons']);
         endif;
-        $id = $this->admin_m->add_data($table,$data);
+        
+        $id = $this->admin_m->add_data($table,$_POST);
+        echo '<pre>';
+        $dd= json_decode($_POST['addons'][1]);
+        print_r($dd);
+        exit;
         $table2='project_additional';
-        if(!empty($_POST['rush']) || (!empty($_POST['addons']) && !empty($_POST['addon_price']))):
+        if(!empty($_POST['rush']) || !empty($_POST['addons'])):
             $datad = array(
                 'client_projects_id'=>$id,
                 'project_additional_feature_name'=>json_decode($_POST['addons']),
-                'project_additional_feature_price'=>json_decode($_POST['addons']),
+                'project_additional_feature_price'=>json_decode($_POST['addons'][1]),
             );
             $addFeatures = $this->admin_m->add_data($table2,$datad);
             $data2=array(
@@ -278,9 +282,9 @@ class Projects extends Client_Controller {
               }
           } else{
             $data=array(
-              'select'=>'type',
-              'table'=>'client_project_brief',
-              'where'=>array('project_brief_id'=>$id),
+              'select'=>'department_name',
+              'table'=>'department',
+              'where'=>array('department_id'=>$id),
               'output_type'=>'row'
             );
             $general['search_type']=$this->admin_m->get($data);

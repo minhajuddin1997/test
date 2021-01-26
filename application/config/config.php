@@ -24,7 +24,7 @@ ob_start();
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://myprojectstaging.com/dynisty';
+$config['base_url'] = 'https://localhost/dynisty_2021';
 
 /*
 |--------------------------------------------------------------------------

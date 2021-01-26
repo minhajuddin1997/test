@@ -135,7 +135,8 @@
                         <i class="far fa-calendar-alt"></i>
                       </span>
                     </div>
-                    <center><input type="text" id='bir' name="project_due_date" value="12/01/2020 - 12/15/2020" /></center>
+                    <input id="datepicker" name="client_projects_due_date" id='bir'>
+                    <!-- <center><input type="text" id='bir' name="project_due_date" value="12/01/2020 - 12/15/2020" /></center> -->
                   </div>
                   <!-- /.input group -->
             </div>
@@ -187,7 +188,7 @@
     </div>
 
               <div class="box-footer">
-                    <button type="submit" class="btn btn-info">Submit</button>
+                    <button type="submit" id="submit_project" class="btn btn-info">Submit</button>
                 </div>
                 </form>
 </section>

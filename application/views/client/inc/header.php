@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin/assets/dist/css/adminlte.min.css">
   <script src="<?php echo base_url();?>assets/front/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
   <!-- DataTables -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- Google Font: Source Sans Pro -->
@@ -35,6 +38,41 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin/assets/plugins/daterangepicker/daterangepicker.css">
 
   <script type="text/javascript">
+      $(function() {
+        function dateCheck(from,to,check) {
+            
+            var fDate,lDate,cDate;
+            fDate = Date.parse(from);
+            lDate = Date.parse(to);
+            cDate = Date.parse(check);
+
+            if((cDate <= lDate && cDate >= fDate)) {
+                return true;
+            }
+            return false;
+        }
+        var a = new Date(2021, 0, 10); // April 10, 2012
+        var b = new Date(2021, 0, 20); // April 20, 2012
+        var formatDateA = a.toLocaleDateString();
+        var formatDateB = b.toLocaleDateString();
+        $("#datepicker").datepicker({
+          beforeShowDay: function(d) {
+            return [true, a <= d && d <= b ? "my-class" : ""];
+          }
+        });
+
+        $("#datepicker").on('change',function(){
+            console.log($(this).val());
+            if(dateCheck(formatDateA, formatDateB,$(this).val())){
+                toastr.success("Available");
+                $("#submit_project").removeAttr('disabled');
+            }else{
+                toastr.error("Not Available");
+                $("#submit_project").attr("disabled",'true');
+            }
+        });
+        
+      });
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
@@ -57,6 +95,14 @@
     }
   </script>
   <style>
+@import url("https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.min.css");
+
+.my-class a {
+  background: #FC0 !important;
+}
+.ui-widget-header{
+  background:#333 !Important;
+}
 /*  input[type="file"] {*/
 /*    display: none;*/
 /*}*/

@@ -129,7 +129,7 @@
               </li>
               <?php } ?>
               <li class="nav-item">
-                <a href="<?php echo base_url('client/crm/contacts'); ?>" class="nav-link">
+                <a href="<?php echo base_url('client/contacts'); ?>" class="nav-link">
                   <i class="nav-icon far fa-circle"></i>
                   <p>Contacts</p>
                 </a>

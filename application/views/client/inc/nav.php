@@ -15,9 +15,10 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="<?php echo base_url('/client/profile/index'); ?>/<?php echo $this->session->userdata('client_id'); ?>" class="nav-link">Profile</a>
       </li>
-      <?php if(!empty($this->session->userdata('data_session'))): ?>
+      <?php if(!empty($this->cart->contents())): ?>
       <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link"><i class="fas fa-shopping-cart"> View Cart (<span id='cart_sec' ></span>)</i></a>
+            <a href="<?php echo base_url('client/market/view_cart'); ?>" class="nav-link"><i class="fas fa-shopping-cart"></i> 
+            View Cart (<?php echo count($this->cart->contents()); ?>)</a>
       </li>
       <?php endif; ?>
       <?php print_r($this->session->userdata('data_session')); ?>
