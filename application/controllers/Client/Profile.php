@@ -22,20 +22,20 @@ class Profile extends Client_Controller {
     
     public function edit($id){
 	    if(!empty($_POST)){
-	        if(!empty($_FILES['user_image']['name'])){
-	            $image_profile = image_file_upload($_FILES['user_image']);
-	            $_POST['user_image'] =  $image_profile;
+	   		$path = './uploads/client';
+	        if(!empty($_FILES['client_image']['name'])){
+	            $image_profile = image_file_upload($_FILES['client_image'], $path);
+	            $_POST['client_image'] =  $image_profile;
+	       }
+	        if(!empty($_FILES['client_cover_image']['name'])){
+	            $image_cover = image_file_upload($_FILES['client_cover_image'], $path);
+	            $_POST['client_cover_image'] = $image_cover;
 	        }
-	        if(!empty($_FILES['user_cover_image']['name'])){
-	            $image_cover = image_file_upload($_FILES['user_cover_image']);
-	            $_POST['user_cover_image'] = $image_cover;
-	        }
-            
             if($image_profile['status'] == 'error' || $image_cover['status'] == 'error'){
               $this->session->set_flashdata('msg', '2');
               $this->session->set_flashdata('alert_data', 'Error Uploading File');
             }
-           $res = $this->admin_m->update_data('users', $_POST, array('user_id' => $id));
+           $res = $this->admin_m->update_data('client', $_POST, array('client_id' => $id));
            if($res){
               $this->session->set_flashdata('msg', '1');
               $this->session->set_flashdata('alert_data', 'Profile Settings Updated');

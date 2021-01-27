@@ -25,35 +25,38 @@
             <!-- Widget: user widget style 1 -->
             <div class="card card-widget widget-user">
               <!-- Add the bg color to the header using any of the bg-* classes -->
-              <div class="widget-user-header text-white" style="background: url('<?php echo !empty($records->client_image) ? base_url() . 'uploads/client/' . $records->client_image : 'Not available'; ?>') center center;">
+              <div class="widget-user-header text-white" style="background: url('<?php echo !empty($records->client_cover_image) ? base_url() . 'uploads/client/' . $records->client_cover_image : 'Not available'; ?>') center center;">
                 <h3 class="widget-user-username text-right"><?php echo !empty($records->client_name) ? ucwords($records->client_name) : 'Not available'; ?></h3>
                 <h5 class="widget-user-desc text-right"><?php echo !empty($records->role_id) ? ucwords($records->role_id) : 'Not available'; ?></h5>
               </div>
               <div class="widget-user-image">
-                <img class="img-circle" style="border: 2px solid #000000;" src="<?php echo !empty($records->client_image) ? base_url() . 'uploads/client/' . $records->client_image : 'Not available'; ?>" alt="User Avatar">
+                <img class="img-circle" style="border: 2px solid #000000;" src="<?php echo !empty($records->client_image) ? base_url() . 'uploads/client/' . $records->client_image : 'Not available'; ?>" alt="Client Avatar">
               </div>
               <div class="card-footer">
                 <div class="row">
                   <div class="col-sm-4 border-right">
                     <div class="description-block">
-                      <h5 class="description-header">3,200</h5>
-                      <span class="description-text">SALES</span>
+                      <?php $ticket = get_list('tickets', array('generated_by'=>$this->session->userdata('client_id'))); ?>
+                      <h5 class="description-header"><?= !empty($ticket) ? count($ticket) : '0'; ?></h5>
+                      <span class="description-text">TICKETS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4 border-right">
                     <div class="description-block">
-                      <h5 class="description-header">13,000</h5>
-                      <span class="description-text">FOLLOWERS</span>
+                      <?php $contact = get_list('crm_contacts', array('client_id'=>$this->session->userdata('client_id'))); ?>
+                      <h5 class="description-header"><?= !empty($contact) ? count($contact) : '0'; ?></h5>
+                      <span class="description-text">CONTACTS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4">
                     <div class="description-block">
-                      <h5 class="description-header">35</h5>
-                      <span class="description-text">PRODUCTS</span>
+                      <?php $project = get_list('client_projects', array('client_id'=>$this->session->userdata('client_id'))); ?>
+                      <h5 class="description-header"><?= !empty($project) ? count($project) : '0'; ?></h5>
+                      <span class="description-text">PROJECTS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
@@ -110,12 +113,11 @@
             <div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
                   <?php if(!($this->session->userdata('role_id') == 1)): ?>
-                  <li class="nav-item"><a class="nav-link" href="#rem_payment" data-toggle="tab">Remaining Payments</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#payments_paid" data-toggle="tab">Payments Paid</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#invoices" data-toggle="tab">Invoices</a></li>
-                  <?php endif; ?>
+<!--                   <li class="nav-item"><a class="nav-link" href="#rem_payment" data-toggle="tab">Remaining Payments</a></li>
+ -->                  <li class="nav-item"><a class="nav-link" href="#payments_paid" data-toggle="tab">Payments Paid</a></li>
+<!--                   <li class="nav-item"><a class="nav-link" href="#invoices" data-toggle="tab">Invoices</a></li>
+ -->                  <?php endif; ?>
                   <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
                 </ul>
               </div><!-- /.card-header -->
@@ -241,9 +243,9 @@
                          <div class="col-sm-10">
 
                           <div class="image-upload" >                      
-                            <img class="imgpath" src="<?php echo !empty($records->user_image)?base_url('uploads/developer/').$records->user_image:base_url('assets/img/placeholder.png')?>" style="width:100px;height:100px;border: 1px solid #E6B86A;">
+                            <img class="imgpath" src="<?php echo !empty($records->client_image)?base_url('uploads/client/').$records->client_image:base_url('assets/img/placeholder.png')?>" style="width:100px;height:100px;border: 1px solid #E6B86A;">
                             <div class="file-btn">
-                                <input type="file" id="user_image" name="user_image" value="<?php echo $records->user_image; ?>" readonly>
+                                <input type="file" id="client_image" name="client_image" value="<?php echo $records->client_image; ?>" >
                             </div>
                             </div>
                         </div>
@@ -257,33 +259,42 @@
                          <div class="col-sm-10">
 
                           <div class="image-upload" >                      
-                            <img class="imgpath" src="<?php echo !empty($records->user_cover_image)?base_url('uploads/developer/').$records->user_cover_image:base_url('assets/img/placeholder.png')?>" style="width:100px;height:100px;border: 1px solid #E6B86A;">
+                            <img class="imgpath" src="<?php echo !empty($records->client_cover_image)?base_url('uploads/client/').$records->client_cover_image:base_url('assets/img/placeholder.png')?>" style="width:100px;height:100px;border: 1px solid #E6B86A;">
                             <div class="file-btn">
-                                <input type="file" id="user_cover_image" name="user_cover_image" value="<?php echo $records->user_cover_image; ?>" readonly>
+                                <input type="file" id="client_cover_image" name="client_cover_image" value="<?php echo $records->client_cover_image; ?>" >
                             </div>
-                            </div>
+                          </div>
                         </div>
                         <!--<label class="col-sm-2 col-form-label">Profile Image</label>-->
                         <!--<div class="col-sm-10">-->
                         <!--  <input type="file" name="user_image" class="form-control">-->
                         <!--</div>-->
-                      </div>
+                    </div>
                      <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Contact</label>
                         <div class="col-sm-10">
-                          <input type="text" name="client_phone_number" class="form-control" placeholder="Client Phone" value="<?php echo !empty($records->client_phone_number)?$records->client_phone_number:''?>">
+                          <input type="text" name="client_phone_number" id="client_phone_number" class="form-control" placeholder="Client Phone" value="<?php echo !empty($records->client_phone_number)?$records->client_phone_number:''?>">
                         </div>
                       </div>
                      <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-10">
-                          <input type="text" name="user_pass" class="form-control" placeholder="Password Here"  value="<?php echo !empty($records->user_pass)?$records->user_pass:''?>">
+                        <div class="col-sm-10  input-group" id="show_hide_password">
+                          <input type="password" name="client_password" class="form-control" placeholder="Password Here"  value="<?php echo !empty($records->client_password)?$records->client_password:''?>">
+                          
+                          &nbsp;
+                            <div class="input-group-addon">
+                              <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                            </div>
                         </div>
                       </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Confirm Password</label>
-                        <div class="col-sm-10"> 
-                          <input type="text" name="user_pass" class="form-control" placeholder="Confirm Password Here" value="<?php echo !empty($records->user_pass)?$records->user_pass:''?>">
+                        <div class="col-sm-10 input-group" id="show_hide_password"> 
+                          <input type="password" name="client_password" class="form-control" placeholder="Confirm Password Here" value="<?php echo !empty($records->client_password)?$records->client_password:''?>">
+                            &nbsp;
+                            <div class="input-group-addon">
+                              <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                            </div>
                         </div>
                       </div>
                       <div class="form-group row">
@@ -307,3 +318,23 @@
     </section>
     <!-- /.content -->
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#client_phone_number').mask('000-0000000');
+
+      $("#show_hide_password a").on('click', function(event) {
+          event.preventDefault();
+          if($('#show_hide_password input').attr("type") == "text"){
+              $('#show_hide_password input').attr('type', 'password');
+              $('#show_hide_password i').addClass( "fa-eye-slash" );
+              $('#show_hide_password i').removeClass( "fa-eye" );
+          }else if($('#show_hide_password input').attr("type") == "password"){
+              $('#show_hide_password input').attr('type', 'text');
+              $('#show_hide_password i').removeClass( "fa-eye-slash" );
+              $('#show_hide_password i').addClass( "fa-eye" );
+          }
+        });
+    });
+
+  </script>

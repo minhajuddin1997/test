@@ -1,5 +1,8 @@
+.text-info {
+    color: #E6B86A !important;
+}
 #tab_mod{
-    background-color: #E6B86A;color:#000000
+    background-color: #000000;color:#fff;
 }
 .card-primary.card-outline {
     border-top: 2px solid #E6B86A !Important;

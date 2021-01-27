@@ -27,7 +27,7 @@ class Contacts extends Client_Controller {
 	    );
 	    $general['id']=$id;
 	    $general['records']=$this->admin_m->get($clients);
-        $general['main_content'] = 'client/contacts/view';
+        $general['main_content'] = 'client/contacts/add';
         $this->load->view('client/inc/view', $general);
 	}
     

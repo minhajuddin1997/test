@@ -4,12 +4,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Account Management</h1>
+            <h1>Contacts</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Account Management</li>
+              <li class="breadcrumb-item active">Contacts</li>
             </ol>
           </div>
         </div>
@@ -21,22 +21,17 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
+          <a class="btn btn-info" href="<?php echo base_url('/client/contacts/add'); ?>">Add Contact</a>
+          <br><br>
             <div class="card card-primary card-outline">
-          <div class="card-header">
-            <h3 class="card-title">
-              <i class="fas fa-edit"></i>
-              User Accounts
+          <div class="card-header" id="tab_mod">
+            <h3 class="card-title" >
+              All Contacts
             </h3>
           </div>
+
           <div class="card-body">
             <div class="row">
-              <div class="col-5 col-sm-3">
-                <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                  <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">Clients</a>
-                  <a class="nav-link" id="vert-tabs-projectmanager-tab" data-toggle="pill" href="#vert-tabs-projectmanager" role="tab" aria-controls="vert-tabs-projectmanager" aria-selected="false">Project Managers</a>
-                  <a class="nav-link" id="vert-tabs-prospect-tab" data-toggle="pill" href="#vert-tabs-prospect" role="tab" aria-controls="vert-tabs-prospect" aria-selected="false">Prospect</a>
-                </div>
-              </div>
               <div class="col-7 col-sm-9">
                 <div class="tab-content" id="vert-tabs-tabContent">
                   <div class="tab-pane text-left fade active show" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
@@ -44,11 +39,11 @@
                     <div class="row d-flex align-items-stretch">
                       <?php if(!empty($records)): $i=0; foreach($records as $row): if($row['role_id'] == 2): $i++;?>
                             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                              <div class="card bg-light">
+                              <div class="card bg-light" >
                                 <div class="card-header text-muted border-bottom-0">
                                    <?php echo 'Client'; ?>
                                 </div>
-                                <div class="card-body pt-0">
+                                <div class="card-body pt-0" >
                                   <div class="row">
                                     <div class="col-7">
                                       <h2 class="lead"><b><?php echo $row['client_name']; ?></b></h2>

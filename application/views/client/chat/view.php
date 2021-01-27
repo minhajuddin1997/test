@@ -161,8 +161,7 @@
              <h5 class="mt-5 text-muted">Summary File</h5>
               <?php
                 if(!empty($record[0]->summary_file)): ?>
-                    <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-
-                    <?php 
+                    <i class="far fa-fw fa-file-<?php 
                         if(pathinfo($record[0]->summary_file, PATHINFO_EXTENSION) == 'pdf'):
                             echo 'pdf';
                         elseif(pathinfo($record[0]->summary_file, PATHINFO_EXTENSION) == 'docx'):
@@ -170,8 +169,7 @@
                         elseif(pathinfo($record[0]->summary_file, PATHINFO_EXTENSION) == 'png'):
                             echo 'image';
                         endif;
-                    ?>
-                  "></i>
+                    ?>"></i><a href="" class="btn-link text-secondary"><?php echo $record[0]->summary_file; ?></a>
                   
               <?php else:
                 echo 'Not Found';   

@@ -77,7 +77,7 @@
                   <td>  
                       <?php 
                       if($record->payment_due == 'Yes'){ ?>
-                        <center><button type='button' class='btn btn-info' style='background: #d4784e;border:1px solid #d4784e;'><a style='color:white !important;' href="<?php echo base_url('client/projects/pay/'); ?><?php echo !empty($record->project_brief_id) ? $record->project_brief_id : 'NULL'; ?>">Pay</a></button></center>
+                        <center><button type='button' class='btn btn-info' style='background: #d4784e;border:1px solid #d4784e;'><a style='color:white !important;' href="<?php echo base_url('client/projects/pay/'); ?><?php echo !empty($record->client_projects_id) ? $record->client_projects_id : 'NULL'; ?>">Pay</a></button></center>
                       <?php } else { echo "<center><p class='btn btn-info' style='background: #048c3a;border:1px solid #048c3a;'><a style='color:white !important;' >Paid</p></center>"; } ?>
                       </td>
                   <td>
@@ -87,20 +87,31 @@
                       <center><a href="<?php echo base_url('client/projects/'); ?>submit_brief_form/<?php echo $record->client_projects_id; ?>"><span style="background:#E6B86A;border-radius:15px" class="btn btn-info">Add Brief</span></a></center>
                     <?php } ?>
                   </td>
+                    <?php $datas = $this->admin_m->get_list('projects_tasks',array('client_projects_id' => $record->client_projects_id)); 
+                     $cal = array();
+                      $totalComp = count($datas);
+                     for($i=0; $i<count($datas); $i++){
+                        if($datas[$i]->status == 'Completed'){
+                            $comCount[] = $datas[$i];
+                        }
+                     }
+                     $valueResult = count($comCount) / $totalComp * 100;
+                    ?>
                   <td class="project_progress">
                       <div class="progress progress-sm">
-                              <div class="progress-bar bg-green" role="progressbar" aria-volumenow="<?php echo $record->complete_status == 'Completed' ? '100' : '0'; ?>"  aria-volumemin="0" aria-volumemax="100" style="width: 57%">
+                     
+                    <div class="progress-bar bg-green" role="progressbar" aria-volumenow="<?php echo $record->complete_status == 'Completed' ? '100' : '0'; ?>"  aria-volumemin="0" aria-volumemax="100" style="width:<?php echo !empty($datas) ? $valueResult.'%' : '0% complete'; ?>">
                               </div>
                           </div>
                           
                         <small>
                               <?php 
-                                if($record->complete_status == 'Completed'): echo '100% Complete'; else: echo '0% complete'; endif; 
+                                if($record->complete_status == 'Completed'): echo '100% Complete'; else: echo !empty($datas) ? round($valueResult).'% complete' : '0% complete'; endif; 
 
                               ?>
                         </small>
                   </td>
-                  <td><?php echo !empty($record->project_due_date) ? $record->project_due_date : 'Not mentioned';?></td>
+                  <td><?php echo !empty($record->client_projects_due_date) ? $record->client_projects_due_date : 'Not mentioned';?></td>
                 
                     <td>
                       <center>

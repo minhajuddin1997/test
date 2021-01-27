@@ -37,7 +37,6 @@ class Register extends CI_Controller {
                     $section['body'] .= '</table>';
                     // $section['subject'] = 'Complete Dynasty Registeration';
                     $body = $this->load->view('email/template', $section, TRUE);
-                    // send_email($this->second,'User logged in into Pluto Projects Dashboard',$body);
                     $result = send_email($email, 'User Registration at Dynisty Brandings', $body);
                     $this->session->set_flashdata('msg', '1');
                     $this->session->set_flashdata('alert_data', 'A Confirmation Email has been sent to your Account');

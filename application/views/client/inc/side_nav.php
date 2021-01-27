@@ -150,20 +150,30 @@
           </li>
           <li class="nav-item">
              <a href="<?php echo base_url('/client/tickets'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'tickets' ? 'active' : ''; ?>">  
-              <i class="nav-icon fas fa-tree"></i>
+              <i class="fas fa-ticket-alt nav-icon"></i>
               <p>
-                 Tickets
+                 Support Tickets
               </p>
             </a>
           </li>
-          <?php if(in_array('chat',$this->permission)) {  ?>
           <li class="nav-item">
             <a href="" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
+              <i class="far fa-comment nav-icon"></i>
               <p>Chat</p>
             </a>
           </li>
-          <?php } ?>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <i class="far fa-file nav-icon"></i>
+              <p>Files</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <i class="far fa-calendar-check nav-icon"></i>
+              <p>Appointments</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="<?php echo base_url('client/tasks/index'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'tasks' ? 'active' : ''; ?>">
               <i class="far fa-circle nav-icon"></i>

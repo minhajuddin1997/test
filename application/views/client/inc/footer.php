@@ -144,6 +144,8 @@ $("#website_brief_form").on('submit', function(event){
     data: $(this).serialize(),
     dataType: 'JSON',
     success: function(res){
+            console.log(res);
+
       if(res == 1){
           toastr.success('Website Brief Submitted');
           $('#exampleModalCenter2').modal('hide');
@@ -166,8 +168,9 @@ $(".dd").on('click',function(){
     }
   });
 });
-$(document).ready(function () {
+window.onload = function(){
   var $form = $(".require-validation");
+                          console.log("token");
 
   $('form.require-validation').bind('submit', function (e) {
     var $form = $(".require-validation"),
@@ -193,6 +196,7 @@ $(document).ready(function () {
     if (!$form.data('cc-on-file')) {
       e.preventDefault();
       Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+
       Stripe.createToken({
         number: $('.card-number').val(),
         cvc: $('.card-cvc').val(),
@@ -204,6 +208,7 @@ $(document).ready(function () {
   });
 
   function stripeResponseHandler(status, response) {
+
     if (response.error) {
       $('.error')
         .removeClass('hide')
@@ -211,13 +216,15 @@ $(document).ready(function () {
         .text(response.error.message);
     } else {
       var token = response['id'];
+      
+
       $form.find('input[type=text]').empty();
       $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
       $form.get(0).submit();
     }
   }
 
-});
+}
 </script>
 <!-- fullCalendar 2.2.5 -->
 <script src="<?php echo base_url(); ?>assets/admin/assets/plugins/moment/moment.min.js"></script>
@@ -228,6 +235,7 @@ $(document).ready(function () {
 <script src="<?php echo base_url(); ?>assets/admin/assets/plugins/fullcalendar-bootstrap/main.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/admin/assets/plugins/daterangepicker/daterangepicker.js"></script>
 <script>
+ 
     $("#when").on('click',function(){
        console.log($("#project_type").val()); 
     });

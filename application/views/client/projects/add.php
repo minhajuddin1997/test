@@ -47,14 +47,20 @@
                     <div class="form-group">
                         <label>Project Type: </label>
                         <select class="form-control" id="project_type" name="project_type" required>
-                            <?php $departments = get_list('department'); ?>
+                            <?php $departments = get_list('main_department'); ?>
                             <option value="">Please Select</option>
                             <?php if(!empty($departments)): foreach($departments as $row):?>
-                                <option value="<?php echo $row->department_id?>"><?php echo $row->department_name ?></option>
+                                <option value="<?php echo $row->main_department_id?>"><?php echo $row->main_department_name ?></option>
                             <?php endforeach; endif; ?>
                         </select>
                     </div>
 
+                    <div class="form-group" id="sub_project_type_main">
+                        <label>Sub Project Type: </label>
+                        <select class="form-control" id="sub_project_type" name="sub_project_type" required>
+                       
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label>Project Summary</label>
                         <textarea class="form-control editor" rows="3" id="project_summary" name="project_summary"><?php echo !empty($record->project_summary)?$record->project_summary:''?></textarea>
@@ -258,3 +264,28 @@
 </div>
 </div>
 </div>
+<script>
+$("#sub_project_type_main").css('display','none');
+$("#project_type").on('change',function(){
+    $("#sub_project_type_main").css('display','block');
+    let value = $(this).val();
+    $("#sub_project_type").empty();
+    $.ajax({
+      url: "<?php echo base_url('client/projects/get_sub_project_type'); ?>",
+      type: "GET",
+      data: {id: value},
+      dataType: 'JSON',
+      success: function(res){
+        if(res.length > 0){
+          for(var i = 0; i < res.length; i++){
+              $("#sub_project_type")
+              .append('<option value="'+res[i].department_id+'">'+res[i].department_name+ '</option>');
+          }
+        } else{
+          toastr.error('Not found');
+        }
+      }
+    });
+});
+
+</script>

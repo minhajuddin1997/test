@@ -22,12 +22,19 @@
 
     <div id='packages' class='pack'>
       <div class="row" id='row_1'>
+        <?php if(!empty($packages)): ?>
         <?php $i=0; foreach($packages as $row => $key): ++$i; ?>
           <label class='col'  id='pack_<?php echo $i; ?>' style='max-width: 350px;'>
             <input type="checkbox"  onChange="myFunctions(pack_<?php echo $i; ?>, this)" class='dd' id='pack_single' name='web_package[]' value="<?php echo $key->package_price; ?>">
             <h3><center><?php echo $key->package_name; ?></center></h3>
             <h1><center>$<?php echo $key->package_price; ?></center></h1> </label>
-          <?php endforeach; ?>
+          <?php endforeach; 
+          else: ?>
+            <div style="margin: 0 auto" ><img src="<?php echo base_url('uploads/settings/not_found.png'); ?>" width="100">
+            <center><h4>Not Found</h4></center>
+            </div>
+          <?php endif; 
+          ?>
       </div>
     </div>
 <br>
@@ -77,7 +84,7 @@
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
       <div class="card-body">
-                  <form role="form" action="<?php echo base_url(); ?>client/projects/pay/<?php echo $id; ?>" method="post" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="pk_test_bbpGR0QxhGaiNwq94HzFyQbT" id="payment-form" >
+            <form role="form" action="<?php echo base_url(); ?>client/projects/pay/<?php echo $id; ?>" method="post" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="pk_test_bbpGR0QxhGaiNwq94HzFyQbT" id="payment-form" >
                          <div class="form-row row required">
                             <?php 
                                 $sum = 0;
@@ -85,7 +92,7 @@
                                     $sum += $row->project_additional_feature_price; 
                                 endforeach; 
                             ?>
-                              <label class="control-label">Amount</label> <input class="form-control" value="<?php echo $sum; ?>" id="amount" name="amount" type="text" disabled>
+                          
                         </div>
                         <div class="form-row row required">
                               <label class="control-label">Name on Card</label> <input class="form-control"  type="text">
@@ -112,10 +119,7 @@
                                     again.</div>
                             </div>
                         </div>
-                        <input type='hidden' name='package_price' id='package' >
-                       <!--  <input type='hidden' name='client_amount' value='<?php echo $client_amount; ?>'>
-                        <input type='hidden' name='client_email' value='<?php echo $email->client_email; ?>'>
-                        <input type='hidden' name='client_id' value='<?php echo $client_id; ?>'> -->
+                        <input type='hidden' name='package_price' id='package' value="<?php echo $sum; ?>" >
                         <div class="row">
                             <div class="col-xs-12">
                                 <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now</button>
